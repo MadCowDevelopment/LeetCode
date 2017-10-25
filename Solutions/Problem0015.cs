@@ -372,22 +372,28 @@ namespace Solutions
                     if (positives.Count(p => p == half) > 1) result.Add(new List<int> { negative, half, half });
                 }
 
-                var maxJ = distinctPositives.Count - 1;
-                for (var i = 0; i < distinctPositives.Count; i++)
+                int i = 0;
+                int j = distinctPositives.Count - 1;
+
+                while (i < j)
                 {
                     var n1 = distinctPositives[i];
                     if (n1 >= -negative) break;
+                    var n2 = distinctPositives[j];
 
-                    for (var j = maxJ; j > i; j--)
+                    var sum = n1 + n2 + negative;
+                    if (sum == 0)
                     {
-                        var n2 = distinctPositives[j];
-                        if (n1 + n2 < -negative) break;
-                        if (n1 + n2 > -negative)
-                        {
-                            maxJ = j - 1;
-                        }
-
-                        if (n1 + n2 + negative == 0) result.Add(new List<int> { negative, n1, n2 });
+                        result.Add(new List<int> { negative, n1, n2 });
+                        i++;
+                    }
+                    else if (sum < 0)
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        j--;
                     }
                 }
             }
@@ -399,25 +405,31 @@ namespace Solutions
                 if (positive % 2 == 0)
                 {
                     var half = (-positive) / 2;
-                    if (negatives.Count(p => p == half) > 1) result.Add(new List<int> { positive, half, half });
+                    if (negatives.Count(p => p == half) > 1) result.Add(new List<int> {positive, half, half});
                 }
-                
-                var maxJ = reverseDistinctNegatives.Count - 1;
-                for (var i = 0; i < reverseDistinctNegatives.Count; i++)
+
+                int i = 0;
+                int j = reverseDistinctNegatives.Count - 1;
+
+                while (i < j)
                 {
                     var n1 = reverseDistinctNegatives[i];
-                    if (-n1 >= -positive) break;
+                    if (-n1 >= positive) break;
+                    var n2 = reverseDistinctNegatives[j];
 
-                    for (var j = maxJ; j > i; j--)
+                    var sum = n1 + n2 + positive;
+                    if (sum == 0)
                     {
-                        var n2 = reverseDistinctNegatives[j];
-                        if (-1 * (n1 + n2) > positive) break;
-                        if (-1 * (n1 + n2) < positive)
-                        {
-                            maxJ = j - 1;
-                        }
-
-                        if (n1 + n2 + positive == 0) result.Add(new List<int> { positive, n1, n2 });
+                        result.Add(new List<int> {positive, n1, n2});
+                        i++;
+                    }
+                    else if (sum < 0)
+                    {
+                        j--;
+                    }
+                    else
+                    {
+                        i++;
                     }
                 }
             }
